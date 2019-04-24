@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-/** 这里假定元素为NSInteger类型 */
+/** 这里假定元素为QueueElement类型 */
 typedef NSInteger QueueElement;
 
 /** 队列协议 */

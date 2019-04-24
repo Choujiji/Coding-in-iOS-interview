@@ -13,7 +13,7 @@
 /** 左半部分（用于出队时使用） */
 @property (strong, nonatomic) NSMutableArray *leftPartInfo;
 
-/** 右半部分（真正存储数据使用） */
+/** 右半部分（真正存储数据使用）*/
 @property (strong, nonatomic) NSMutableArray *rightPartInfo;
 
 @end
