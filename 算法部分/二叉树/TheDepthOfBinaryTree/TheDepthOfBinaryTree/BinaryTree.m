@@ -79,16 +79,37 @@
 
 /** 前序遍历二叉树 */
 - (void)pTraversingBinaryTreeWithPreOrderWithTreeNode: (TreeNode *)preOrderTree {
-        // 无数据的为占位节点，跳过
-    if (!preOrderTree || !preOrderTree.data) {
-        return;
-    }
+    // 【非递归方式遍历】
     
-        // 根 - 左 - 右
-    NSLog(@"%@", preOrderTree.data);
-   
-    [self pTraversingBinaryTreeWithPreOrderWithTreeNode:preOrderTree.leftChild];
-    [self pTraversingBinaryTreeWithPreOrderWithTreeNode:preOrderTree.rightChild];
+    // 节点数组（实现关键）
+    NSMutableArray *nodeInfo = [NSMutableArray arrayWithCapacity:10];
+    // 当前节点指针（初始指向根节点，对应前序遍历）
+    TreeNode *currentNode = preOrderTree;
+    
+    // 前序遍历顺序，即从根节点开始，一直查找左节点；到头之后，依次从子到根节点查看上一个节点的右节点
+    while (nodeInfo.count > 0 || currentNode) {
+        if (currentNode) {
+            // 此节点作为子树的根
+            // 记录值（访问了“根”）
+            // 注意：占位节点不考虑
+            if (currentNode.data) {
+                NSLog(@"%@", currentNode.data);
+                // 加入节点容器
+                [nodeInfo addObject:currentNode];
+            }
+            
+            // 继续查找左子节点（访问“左”）
+            currentNode = currentNode.leftChild;
+        } else {
+            // 左子树为空，找到该子树的根节点
+            // 根节点即保存在节点容器中（最后一个）
+            TreeNode *subRootNode = [nodeInfo lastObject];
+            // 出栈
+            [nodeInfo removeObjectAtIndex:nodeInfo.count - 1];
+            // 查找其右子树（访问“右”）
+            currentNode = subRootNode.rightChild;
+        }
+    }
 }
 
 - (NSInteger)pGetDepthOfBinaryTree:(TreeNode *)tree {
