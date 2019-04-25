@@ -42,6 +42,48 @@
     [self pTraversingBinaryTreeWithPreOrderWithTreeNode:self.rootNode];
 }
 
+- (void)traverseBinaryTreeInLevelOrder {
+    // 设置队列（使用数组实现，每一次队列遍历都是一层节点），通过队列的先进先出方式实现遍历
+    NSMutableArray *queue = [NSMutableArray arrayWithCapacity:10];
+    
+    // 第一层入队
+    if (self.rootNode) {
+        [queue addObject:self.rootNode];
+    }
+    
+    // 按“层”遍历
+    while (queue.count) {
+        // 每一层挨个遍历【注意：每一层不能干扰其它层】
+        NSInteger sizeOfLevel = queue.count;
+        for (NSInteger index = 0; index < sizeOfLevel; index += 1) {
+            // 节点出队
+            TreeNode *node = [queue firstObject];
+            [queue removeObjectAtIndex:0];
+            
+            // 占位节点，直接跳过
+            if (!node.data) {
+                continue;
+            }
+            
+            // 访问
+            NSLog(@"%@", node.data);
+            
+            // 查看左右子节点，构建下一层
+            if (node.leftChild) {
+                // 入队（为下一层准备）
+                [queue addObject:node.leftChild];
+            }
+            if (node.rightChild) {
+                // 入队（为下一层准备）
+                [queue addObject:node.rightChild];
+            }
+            
+        }
+        
+    }
+    
+}
+
 - (NSInteger)depth {
     return [self pGetDepthOfBinaryTree:self.rootNode];
 }

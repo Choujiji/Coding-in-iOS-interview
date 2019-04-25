@@ -24,4 +24,7 @@
 /** 前序遍历二叉树 */
 - (void)traverseBinaryTreeInPreOrder;
 
+/** 层序遍历二叉树（广度优先遍历） */
+- (void)traverseBinaryTreeInLevelOrder;
+
 @end
