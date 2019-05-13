@@ -9,60 +9,38 @@
 #import <Foundation/Foundation.h>
 
 /** 排序合并两个集合 */
-NSArray *merge(NSArray *leftInfo, NSArray *rightInfo) {
-    // 结果容器
-    NSMutableArray *result = [NSMutableArray arrayWithCapacity:10];
+NSArray *merge(NSArray *source1, NSArray *source2) {
+    NSMutableArray *resultInfo = [NSMutableArray arrayWithCapacity:source1.count + source2.count];
     
-    //获取两者的迭代器
-    NSEnumerator *enumerator1 = leftInfo.objectEnumerator;
-    NSEnumerator *enumerator2 = rightInfo.objectEnumerator;
+    NSUInteger index1 = 0;
+    NSUInteger index2 = 0;
     
-    // 依次取出二者的值，进行比较
-    NSNumber *num1 = enumerator1.nextObject;
-    NSNumber *num2 = enumerator2.nextObject;
-    
-    // 遍历排列结束，否则一直执行【这里使用升序排列】
-    while (true) {
-        if ([num1 compare:num2] == NSOrderedAscending) {
-            // 插入小的num1
-            [result addObject:num1];
-            NSNumber *nextNum1 = enumerator1.nextObject;
-            if (nextNum1) {
-                // 若left还存在对象，指针后移【继续比较】
-                num1 = nextNum1;
-            } else {
-                // left已空，依次插入right元素
-                [result addObject:num2];
-                NSNumber *nextNum2 = enumerator2.nextObject;
-                while (nextNum2) {
-                    [result addObject:nextNum2];
-                    nextNum2 = enumerator2.nextObject;
-                }
-                // 合并结束，退出
-                break;
-            }
+    // 遍历
+    while ((index1 < source1.count)
+           && (index2 < source2.count)) {
+        NSNumber *item1 = source1[index1];
+        NSNumber *item2 = source2[index2];
+        // 比较（升序排列）：将小的所在数组索引后移
+        if ([item1 compare:item2] == NSOrderedAscending) {
+            [resultInfo addObject:item1];
+            index1 += 1;
         } else {
-            // 插入小的num2
-            [result addObject:num2];
-            NSNumber *nextNum2 = enumerator2.nextObject;
-            if (nextNum2) {
-                // right还存在对象，指针后移【继续比较】
-                num2 = nextNum2;
-            } else {
-                // right已空，将left依次插入
-                [result addObject:num1];
-                NSNumber *nextNum1 = enumerator1.nextObject;
-                while (nextNum1) {
-                    [result addObject:num1];
-                    nextNum1 = enumerator1.nextObject;
-                }
-                // 合并结束，退出
-                break;
-            }
+            [resultInfo addObject:item2];
+            index2 += 1;
         }
     }
+    // 若数组还有剩余，将剩余元素直接插入
+    if (index1 < source1.count) {
+        NSArray *theLeftSource = [source1 subarrayWithRange:NSMakeRange(index1, source1.count - index1)];
+        [resultInfo addObjectsFromArray:theLeftSource];
+    }
+    if (index2 < source2.count) {
+        NSArray *theLeftSource = [source2 subarrayWithRange:NSMakeRange(index2, source2.count - index2)];
+        [resultInfo addObjectsFromArray:theLeftSource];
+    }
     
-    return result;
+    // 返回合并结果
+    return resultInfo;
 }
 
 /** 归并排序指定数组 */
